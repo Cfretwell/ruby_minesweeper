@@ -10,3 +10,7 @@ class Board
 
 end
 
+
+b = Board.new()
+
+
