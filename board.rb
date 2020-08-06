@@ -19,9 +19,47 @@ class Board
         
         bomb_locations.each do |pos|
             @board[pos[0]][pos[1]].place_bomb
+            add_bordering(pos)
         end 
-            
+        
     end
+
+    def add_bordering(pos)
+        range = (0...@board.length).to_a
+        p r = pos[0]
+        p c = pos[1]
+        p @board[r][c+1]
+
+        if c+1 < @board.length # col+ is good 
+            @board[r][c+1].add_border_bomb
+            
+            if r+1 < @board.length # row+ good 
+                @board[r+1][c+1].add_border_bomb
+                              
+            end
+            if r-1>=0 # row- good 
+                
+                @board[r-1][c+1].add_border_bomb
+            end
+        end
+        if c-1 < @board.length # col+ is good 
+            
+            @board[r][c-1].add_border_bomb
+            if r+1 < @board.length # row+ good 
+                
+                @board[r+1][c-1].add_border_bomb
+            end
+            if r-1>=0 # row- good 
+                
+                @board[r-1][c-1].add_border_bomb
+            end
+        end
+        @board[r+1][c].add_border_bomb if r+1 < @board.length # row + good 
+        @board[r-1][c].add_border_bomb if r-1 >=0 # row - good 
+
+        
+    end
+
 
     def pick_bombs(bomb_count, board_size)
         arr = [*0..(board_size-1)**2].shuffle
