@@ -10,8 +10,8 @@ class Board
 
     end
 
-    def [](x,y)
-        @board[x][y] 
+    def guess (x,y)
+        @board[x][y].flip 
     end
 
     def add_bombs(bomb_count, board_size)
@@ -25,39 +25,42 @@ class Board
     end
 
     def add_bordering(pos)
+        find_boardering(pos).each do |b|
+            @board[b[0]][b[1]].add_border_bomb
+        end
+    end
+
+
+    def find_boardering(pos)
+        arr = []
+
         range = (0...@board.length).to_a
         p r = pos[0]
         p c = pos[1]
         p @board[r][c+1]
 
         if c+1 < @board.length # col+ is good 
-            @board[r][c+1].add_border_bomb
-            
+            arr << [r,c+1]
             if r+1 < @board.length # row+ good 
-                @board[r+1][c+1].add_border_bomb
-                              
+                arr << [r+1,c+1]
             end
             if r-1>=0 # row- good 
-                
-                @board[r-1][c+1].add_border_bomb
+                arr << [r-1,c+1]
             end
         end
         if c-1 < @board.length # col+ is good 
-            
-            @board[r][c-1].add_border_bomb
+            arr << [r,c-1]
             if r+1 < @board.length # row+ good 
-                
-                @board[r+1][c-1].add_border_bomb
+                arr << [r+1,c-1]
             end
             if r-1>=0 # row- good 
-                
-                @board[r-1][c-1].add_border_bomb
+                arr << [r-1,c-1]
             end
         end
-        @board[r+1][c].add_border_bomb if r+1 < @board.length # row + good 
-        @board[r-1][c].add_border_bomb if r-1 >=0 # row - good 
+        arr << [r+1,c] if r+1 < @board.length # row + good 
+        arr << [r-1,c] if r-1 >= 0 # row - good 
 
-        
+        arr
     end
 
 
@@ -75,14 +78,16 @@ class Board
     end
 
     def render 
-        puts "  " + (0...@board.length).to_a.join(" ")
+        puts "     " + (0...@board.length).to_a.join(" ")
+        puts"    "
         @board.each_with_index do |row, i| 
-            print  i 
+            print  " "+i.to_s + "  "
             row.each do |t|
                 print " "+ (t.bordering_bombs).to_s 
             end
             puts ""
         end
+        puts""
     end
 
 
@@ -92,4 +97,8 @@ end
 b = Board.new()
 
 b.render 
+
+# p b.guess(1,1)
+
+# b.render 
 
