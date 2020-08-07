@@ -17,8 +17,9 @@ class Tile
     end
 
     def bordering_bombs
-        return " " if @hidden
+        return "*" if @hidden
         return "B" if @bomb 
+        return "_" if @bordering_bombs ==0
         return @bordering_bombs if !@hidden
         # return "H"
     end

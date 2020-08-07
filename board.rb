@@ -34,10 +34,8 @@ class Board
     def find_boardering(pos)
         arr = []
 
-        range = (0...@board.length).to_a
-        p r = pos[0]
-        p c = pos[1]
-        p @board[r][c+1]
+        r = pos[0]
+        c = pos[1]
 
         if c+1 < @board.length # col+ is good 
             arr << [r,c+1]
@@ -94,11 +92,5 @@ class Board
 end
 
 
-b = Board.new()
 
-b.render 
-
-# p b.guess(1,1)
-
-# b.render 
 
