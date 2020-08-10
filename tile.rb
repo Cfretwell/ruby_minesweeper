@@ -8,6 +8,10 @@ class Tile
         @bordering_bombs = 0  
     end
 
+    def hidden?()
+        @hidden 
+    end
+
     def add_border_bomb
         @bordering_bombs +=1
     end

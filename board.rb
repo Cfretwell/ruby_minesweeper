@@ -10,8 +10,8 @@ class Board
 
     end
 
-    def guess (x,y)
-        @board[x][y].flip 
+    def guess (pos)
+        @board[pos[0]][pos[1]].flip 
     end
 
     def add_bombs(bomb_count, board_size)
@@ -88,6 +88,24 @@ class Board
         puts""
     end
 
+    def valid_pos?(pos)
+        x = pos[0]
+        y = pos[1]
+
+        if x >= @board.length || x < 0
+            puts "x out of bounds"
+            return false 
+        elsif y >= @board.length || y < 0
+            puts "y out of bounds"
+            return false 
+        elsif !@board[x][y].hidden?
+            puts "location already guessed!"
+            return false 
+        else 
+            return true
+        end
+
+    end
 
 end
 
