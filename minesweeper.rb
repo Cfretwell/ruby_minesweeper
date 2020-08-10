@@ -4,25 +4,30 @@ class Minesweeper
     require_relative 'board.rb'
 
     def initialize()
-        
+        @hit_bomb = false 
 
     end
 
     def run() 
-        @board = Board.new()
+        
+        @board = Board.new(2,5)
 
         puts "Wellcome to Minesweeper!"
 
-        @board.render 
+        while !@hit_bomb && !@board.win?
+            
 
-        # while game not over run..
+            @board.render()
 
-        take_turn()
-        # take turn 
+            # while game not over run..
 
-        @board.render 
+            take_turn()
+            # take turn 
 
+            # @board.render 
+        end
 
+        @board.render()
     end
 
 
@@ -59,7 +64,7 @@ class Minesweeper
 
     def lose_case()
         puts "Bomb! You Loose!"
-    
+        @hit_bomb = true 
     end
 
 

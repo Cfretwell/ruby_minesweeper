@@ -12,6 +12,10 @@ class Tile
         @hidden 
     end
 
+    def bomb?()
+        @bomb
+    end
+
     def add_border_bomb
         @bordering_bombs +=1
     end

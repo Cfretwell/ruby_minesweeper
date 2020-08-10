@@ -75,7 +75,7 @@ class Board
         bomb_locations
     end
 
-    def render 
+    def render()
         puts "     " + (0...@board.length).to_a.join(" ")
         puts"    "
         @board.each_with_index do |row, i| 
@@ -105,6 +105,15 @@ class Board
             return true
         end
 
+    end
+
+    def win?()
+        @board.each do |r|
+            r.each do |t|
+                return false if !t.bomb? && t.hidden?
+            end
+        end
+        true 
     end
 
 end
