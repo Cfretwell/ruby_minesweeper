@@ -5,6 +5,7 @@ class Tile
     def initialize()
         @bomb = false # true or false
         @hidden = true  
+        @flag = false
         @bordering_bombs = 0  
     end
 
@@ -25,6 +26,7 @@ class Tile
     end
 
     def bordering_bombs
+        return "F" if @flag
         return "*" if @hidden
         return "B" if @bomb 
         return "_" if @bordering_bombs ==0
@@ -34,7 +36,12 @@ class Tile
 
     def flip
         @hidden = false 
+        @flag = false 
         bordering_bombs()
+    end
+
+    def flag=(val)
+        @flag = !!val
     end
 
 

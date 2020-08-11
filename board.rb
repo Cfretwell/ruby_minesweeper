@@ -7,18 +7,27 @@ class Board
     def initialize(bomb_count = 9, board_size = 9) 
         @board = Array.new(board_size)  {Array.new(board_size) {Tile.new()}  }
         add_bombs(bomb_count, board_size)
+        
 
     end
 
+    def flipped?(pos)
+        !get_t(pos).hidden?()
+    end
+
+    def get_t(pos)
+        @board[pos[0]][pos[1]]
+    end
+
     def guess (pos)
-        @board[pos[0]][pos[1]].flip 
+        get_t(pos).flip 
     end
 
     def add_bombs(bomb_count, board_size)
         bomb_locations = pick_bombs(bomb_count, board_size)
         
         bomb_locations.each do |pos|
-            @board[pos[0]][pos[1]].place_bomb
+            get_t(pos).place_bomb
             add_bordering(pos)
         end 
         
@@ -26,7 +35,7 @@ class Board
 
     def add_bordering(pos)
         find_boardering(pos).each do |b|
-            @board[b[0]][b[1]].add_border_bomb
+            get_t(b).add_border_bomb
         end
     end
 
@@ -46,7 +55,7 @@ class Board
                 arr << [r-1,c+1]
             end
         end
-        if c-1 < @board.length # col+ is good 
+        if c-1 >= 0 # col- is good 
             arr << [r,c-1]
             if r+1 < @board.length # row+ good 
                 arr << [r+1,c-1]
@@ -59,6 +68,10 @@ class Board
         arr << [r-1,c] if r-1 >= 0 # row - good 
 
         arr
+    end
+
+    def is_hidden?(pos)
+        get_t(pos).hidden?
     end
 
 
@@ -116,8 +129,11 @@ class Board
         true 
     end
 
-end
+    def flag(pos)
+        get_t(pos).flag = true 
+    end
 
+end
 
 
 

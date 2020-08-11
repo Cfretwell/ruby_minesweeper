@@ -5,7 +5,7 @@ class Minesweeper
 
     def initialize()
         @hit_bomb = false 
-
+        @guessed = []
     end
 
     def run() 
@@ -26,6 +26,11 @@ class Minesweeper
 
             # @board.render 
         end
+        if @hit_bomb
+            puts "Lost :("
+        else
+            puts "you WON!! noice"
+        end
 
         @board.render()
     end
@@ -40,13 +45,14 @@ class Minesweeper
             flipped = @board.guess(pos)
             flip_check(flipped,pos)
         elsif action == "f"
-            @board.flag(pos)
+            flag(pos)
         end
 
     end
 
-    def flag()
+    def flag(pos)
         puts "Flag!"
+        @board.flag(pos)
     end
 
     def flip_check(val, pos)
@@ -59,7 +65,23 @@ class Minesweeper
     end
 
     def reveal_recur(pos)
-        p @board.find_boardering(pos)
+        puts "reveal Recur!"
+        if @board.guess(pos) == "_"  
+        
+            p surounding = @board.find_boardering(pos)
+            surounding.each do |l|
+                puts "checking"
+                p @board.flipped?(l)
+                if !@board.flipped?(l)
+                    
+                    reveal_recur(l) 
+                end
+
+            end
+        
+        end
+        
+        @board.render()
     end
 
     def lose_case()
@@ -94,6 +116,7 @@ class Minesweeper
                 puts "please enter a valid location"
             end
         end
+
         [action,pos] 
     end
 
@@ -104,7 +127,7 @@ class Minesweeper
             puts "reveal"
             return true
         elsif char == "f"
-            puts "flagg"
+            puts "flag"
             return true
         else
             return false 
@@ -112,8 +135,9 @@ class Minesweeper
     end
 
     def valid_location?(pos)
-        puts "check location"
-        p pos 
+        # puts "check location"
+        # p pos 
+        return false if @guessed.include?(pos)
         return @board.valid_pos?(pos)
     end
 
