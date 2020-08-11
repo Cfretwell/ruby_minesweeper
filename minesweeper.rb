@@ -2,6 +2,8 @@
 class Minesweeper
 
     require_relative 'board.rb'
+    require 'yaml'
+    require 'pathname'
 
     def initialize()
         @hit_bomb = false 
@@ -16,15 +18,9 @@ class Minesweeper
 
         while !@hit_bomb && !@board.win?
             
-
             @board.render()
 
-            # while game not over run..
-
             take_turn()
-            # take turn 
-
-            # @board.render 
         end
         if @hit_bomb
             puts "Lost :("
@@ -36,6 +32,33 @@ class Minesweeper
     end
 
 
+    def save_board()
+        File.open("boardSave.yml","w"){|file| file.write(@board.to_yaml)}
+    end
+
+    def load_board()
+        name = getFileName()
+        @board = YAML.load(File.read(name))
+    end
+
+    def getFileName()
+        invalid = true 
+        while invalid 
+            puts "enter File Name:"
+            input = gets.chomp()
+            puts input 
+            input = Pathname.new(input)
+            if input.exist?()
+                invalid = false 
+            else
+                puts "Invlaid file?"
+            end
+
+        end
+
+        input 
+    end
+
     def take_turn()
         input = get_input()
         action = input[0]
@@ -46,6 +69,10 @@ class Minesweeper
             flip_check(flipped,pos)
         elsif action == "f"
             flag(pos)
+        elsif action =="s"
+            save_board()
+        elsif action == "l"
+            load_board()
         end
 
     end
@@ -94,7 +121,7 @@ class Minesweeper
         invalid = true 
         while invalid
             invalid = false
-            puts "Enter an 'action, x location, y location'"
+            puts "Enter an 'action, row location, col location'"
             input = gets.chomp.split(",")
             
 
@@ -129,6 +156,12 @@ class Minesweeper
         elsif char == "f"
             puts "flag"
             return true
+        elsif char == "s"
+            puts "save"
+            return true 
+        elsif char == "l"
+            puts "load"
+            return true 
         else
             return false 
         end
